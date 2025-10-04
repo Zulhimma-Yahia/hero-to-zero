@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Like Hero To Zero - CO2 Emissionen weltweit</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌍 Like Hero To Zero</h1>
+            <p class="subtitle">Weltweite CO2-Emissionsdaten</p>
+            <nav>
+                <a th:href="@{/}" class="active">Startseite</a>
+                <a th:href="@{/login}">Wissenschaftler-Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>Willkommen bei Like Hero To Zero</h2>
+            <p>Hier finden Sie aktuelle CO2-Emissionsdaten von Ländern weltweit. 
+               Wählen Sie ein Land aus, um detaillierte Informationen zu erhalten.</p>
+        </section>
+
+        <section class="country-selector">
+            <h3>Land auswählen</h3>
+            <div class="country-grid">
+                <div th:each="country : ${countries}" class="country-card">
+                    <a th:href="@{/public/country(id=${country.id})}">
+                        <h4 th:text="${country.name}">Land</h4>
+                        <p class="country-code" th:text="${country.isoCode}">ISO</p>
+                        <p class="continent" th:text="${country.continent}">Kontinent</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="data-table">
+            <h3>Aktuelle CO2-Emissionsdaten (alle Länder)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Land</th>
+                            <th>Jahr</th>
+                            <th>CO2-Emissionen (Mt)</th>
+                            <th>Pro Kopf (t)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="emission : ${emissions}">
+                            <td>
+                                <a th:href="@{/public/country(id=${emission.country.id})}" 
+                                   th:text="${emission.country.name}">Land</a>
+                            </td>
+                            <td th:text="${emission.year}">2023</td>
+                            <td th:text="${#numbers.formatDecimal(emission.emissionValue, 1, 2)}">1000.00</td>
+                            <td th:text="${emission.emissionPerCapita != null ? #numbers.formatDecimal(emission.emissionPerCapita, 1, 2) : '-'}">10.50</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(emissions)}">
+                            <td colspan="4" class="no-data">Keine Daten verfügbar</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Like Hero To Zero | Projekt zur nachhaltigen Datentransparenz</p>
+        </div>
+    </footer>
+</body>
+</html>

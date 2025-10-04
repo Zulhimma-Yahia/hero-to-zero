@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Like Hero To Zero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌍 Like Hero To Zero - Wissenschaftler-Dashboard</h1>
+            <nav>
+                <span th:text="'Angemeldet als: ' + ${username}">User</span>
+                <a th:href="@{/}">Öffentliche Ansicht</a>
+                <a th:href="@{/scientist/add}">Neue Daten hinzufügen</a>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Abmelden</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div th:if="${success}" class="alert alert-success" th:text="${success}">Erfolg!</div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}">Fehler!</div>
+
+        <section class="dashboard-section">
+            <h2>Ausstehende Freigaben</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Land</th>
+                            <th>Jahr</th>
+                            <th>CO2-Emissionen (Mt)</th>
+                            <th>Pro Kopf (t)</th>
+                            <th>Eingereicht von</th>
+                            <th>Eingereicht am</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="emission : ${pendingEmissions}">
+                            <td th:text="${emission.country.name}">Land</td>
+                            <td th:text="${emission.year}">2023</td>
+                            <td th:text="${#numbers.formatDecimal(emission.emissionValue, 1, 2)}">1000.00</td>
+                            <td th:text="${emission.emissionPerCapita != null ? #numbers.formatDecimal(emission.emissionPerCapita, 1, 2) : '-'}">10.50</td>
+                            <td th:text="${emission.submittedBy}">User</td>
+                            <td th:text="${#temporals.format(emission.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023</td>
+                            <td>
+                                <a th:href="@{/scientist/approve/{id}(id=${emission.id})}" 
+                                   class="btn btn-success btn-small"
+                                   onclick="return confirm('Daten freigeben?')">✓ Freigeben</a>
+                                <a th:href="@{/scientist/delete/{id}(id=${emission.id})}" 
+                                   class="btn btn-danger btn-small"
+                                   onclick="return confirm('Wirklich löschen?')">✗ Löschen</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(pendingEmissions)}">
+                            <td colspan="7" class="no-data">Keine ausstehenden Freigaben</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h2>Alle freigegebenen Daten</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Land</th>
+                            <th>Jahr</th>
+                            <th>CO2-Emissionen (Mt)</th>
+                            <th>Pro Kopf (t)</th>
+                            <th>Eingereicht von</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="emission : ${allEmissions}">
+                            <td th:text="${emission.country.name}">Land</td>
+                            <td th:text="${emission.year}">2023</td>
+                            <td th:text="${#numbers.formatDecimal(emission.emissionValue, 1, 2)}">1000.00</td>
+                            <td th:text="${emission.emissionPerCapita != null ? #numbers.formatDecimal(emission.emissionPerCapita, 1, 2) : '-'}">10.50</td>
+                            <td th:text="${emission.submittedBy != null ? emission.submittedBy : 'System'}">User</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(allEmissions)}">
+                            <td colspan="5" class="no-data">Keine Daten verfügbar</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Like Hero To Zero</p>
+        </div>
+    </footer>
+</body>
+</html>

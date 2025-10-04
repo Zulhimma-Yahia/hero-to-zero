@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Like Hero To Zero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌍 Like Hero To Zero</h1>
+            <nav>
+                <a th:href="@{/}">Zurück zur Startseite</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="login-container">
+            <h2>Wissenschaftler-Login</h2>
+            
+            <div th:if="${param.error}" class="alert alert-error">
+                Ungültiger Benutzername oder Passwort!
+            </div>
+            
+            <div th:if="${param.logout}" class="alert alert-success">
+                Erfolgreich abgemeldet!
+            </div>
+            
+            <form th:action="@{/login}" method="post" class="login-form">
+                <div class="form-group">
+                    <label for="username">Benutzername:</label>
+                    <input type="text" id="username" name="username" required autofocus>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Passwort:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Anmelden</button>
+            </form>
+            
+            <div class="demo-credentials">
+                <h4>Demo-Zugangsdaten:</h4>
+                <p><strong>Benutzername:</strong> scientist</p>
+                <p><strong>Passwort:</strong> password</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Like Hero To Zero</p>
+        </div>
+    </footer>
+</body>
+</html>

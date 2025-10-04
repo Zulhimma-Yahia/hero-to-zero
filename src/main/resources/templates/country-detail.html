@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${country.name} + ' - Like Hero To Zero'">Land Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌍 Like Hero To Zero</h1>
+            <nav>
+                <a th:href="@{/}">Zurück zur Übersicht</a>
+                <a th:href="@{/login}">Wissenschaftler-Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="country-header">
+            <h2 th:text="${country.name}">Land</h2>
+            <div class="country-info">
+                <p><strong>ISO-Code:</strong> <span th:text="${country.isoCode}">ISO</span></p>
+                <p><strong>Kontinent:</strong> <span th:text="${country.continent}">Kontinent</span></p>
+            </div>
+        </section>
+
+        <section class="latest-data" th:if="${latestEmission != null}">
+            <h3>Aktuellste Daten</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Jahr</h4>
+                    <p class="stat-value" th:text="${latestEmission.year}">2023</p>
+                </div>
+                <div class="stat-card">
+                    <h4>CO2-Emissionen</h4>
+                    <p class="stat-value" th:text="${#numbers.formatDecimal(latestEmission.emissionValue, 1, 2)} + ' Mt'">1000 Mt</p>
+                </div>
+                <div class="stat-card" th:if="${latestEmission.emissionPerCapita != null}">
+                    <h4>Pro Kopf</h4>
+                    <p class="stat-value" th:text="${#numbers.formatDecimal(latestEmission.emissionPerCapita, 1, 2)} + ' t'">10.5 t</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="historical-data">
+            <h3>Historische Daten</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jahr</th>
+                            <th>CO2-Emissionen (Mt)</th>
+                            <th>Pro Kopf (t)</th>
+                            <th>Eingereicht am</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="emission : ${emissions}" th:if="${emission.approved}">
+                            <td th:text="${emission.year}">2023</td>
+                            <td th:text="${#numbers.formatDecimal(emission.emissionValue, 1, 2)}">1000.00</td>
+                            <td th:text="${emission.emissionPerCapita != null ? #numbers.formatDecimal(emission.emissionPerCapita, 1, 2) : '-'}">10.50</td>
+                            <td th:text="${#temporals.format(emission.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 12:00</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(emissions)}">
+                            <td colspan="4" class="no-data">Keine historischen Daten verfügbar</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Like Hero To Zero</p>
+        </div>
+    </footer>
+</body>
+</html>

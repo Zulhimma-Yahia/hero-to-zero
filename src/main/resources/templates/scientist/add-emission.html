@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neue Daten hinzufügen - Like Hero To Zero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌍 Like Hero To Zero</h1>
+            <nav>
+                <a th:href="@{/scientist/dashboard}">Zurück zum Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="form-container">
+            <h2>Neue CO2-Emissionsdaten hinzufügen</h2>
+            
+            <form th:action="@{/scientist/add}" th:object="${emission}" method="post" class="data-form">
+                <div class="form-group">
+                    <label for="countryId">Land *</label>
+                    <select id="countryId" name="countryId" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option th:each="country : ${countries}" 
+                                th:value="${country.id}" 
+                                th:text="${country.name}">Land</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year">Jahr *</label>
+                    <input type="number" id="year" th:field="*{year}" 
+                           min="1900" max="2100" required>
+                    <span class="error" th:if="${#fields.hasErrors('year')}" 
+                          th:errors="*{year}">Fehler</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="emissionValue">CO2-Emissionen (Mt) *</label>
+                    <input type="number" id="emissionValue" th:field="*{emissionValue}" 
+                           step="0.01" min="0" required>
+                    <span class="error" th:if="${#fields.hasErrors('emissionValue')}" 
+                          th:errors="*{emissionValue}">Fehler</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="emissionPerCapita">CO2-Emissionen pro Kopf (t)</label>
+                    <input type="number" id="emissionPerCapita" th:field="*{emissionPerCapita}" 
+                           step="0.01" min="0">
+                    <span class="help-text">Optional</span>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Daten einreichen</button>
+                    <a th:href="@{/scientist/dashboard}" class="btn btn-secondary">Abbrechen</a>
+                </div>
+                
+                <p class="info-text">
+                    * Pflichtfelder<br>
+                    Hinweis: Ihre eingereichte Daten werden vor der Veröffentlichung überprüft.
+                </p>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Like Hero To Zero</p>
+        </div>
+    </footer>
+</body>
+</html>
