@@ -80,7 +80,7 @@ Eine Webanwendung zur Verwaltung und Darstellung weltweiter CO2-Emissionsdaten.
 
 ```bash
 
-git clone https://github.com/DEIN-USERNAME/hero-to-zero.git
+git clone https://github.com/Zulhimma-Yahia/hero-to-zero.git
 
 cd hero-to-zero
 
